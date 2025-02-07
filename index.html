@@ -1,0 +1,319 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classic Paint</title>
+  <link rel="shortcut icon" href="https://i.imgur.com/SAz4Efe.png" type="image/x-icon"> 
+ 
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Cookie|Itim" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Ensure full height for vertical centering */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body, a {
+      cursor: url('graphics/cursor_heartwing1.png'), auto;
+      background-color: #ffd8f2;
+      font-family: "Itim", sans-serif;
+      color: #816b97;
+    }
+    /* MS Paint Container -*/
+    #MSpaintcontainer {
+      border: 2px solid #b77797;
+      border-radius: 60px;
+      background: radial-gradient(50% 50% at 50% 50%, #F5CEE1 0%, #FFF7FB 92%);
+      box-shadow: 10px 10px 8px #282323;
+      padding: 20px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    /* Title container above the canvas */
+    .title-container {
+      font-family: 'Raleway', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #b77797;
+    }
+    /* Canvas styling */
+    #canvas {
+      border: 3px solid #333;
+      border-radius: 10px;
+      background-color: white;
+      touch-action: none;
+      cursor: crosshair;
+    }
+    /* Custom Uniform Pink Shaded Buttons for all states */
+    .btn,
+    .btn:focus,
+    .btn:hover,
+    .btn:active,
+    .btn-outline-primary,
+    .btn-outline-primary:focus,
+    .btn-outline-primary:hover,
+    .btn-outline-danger,
+    .btn-outline-danger:focus,
+    .btn-outline-danger:hover,
+    .btn-success,
+    .btn-success:focus,
+    .btn-success:hover {
+      background-color: #ff99cc !important;
+      border-color: #ff66b2 !important;
+      color: white !important;
+      border-radius: 30px;
+    }
+    .btn:active,
+    .btn-outline-primary:active,
+    .btn-outline-danger:active,
+    .btn-success:active {
+      background-color: #ff66b2 !important;
+      border-color: #ff3385 !important;
+    }
+    .tool-btn.active {
+      background-color: #ff66b2 !important;
+      color: white !important;
+    }
+    .color-preview {
+      width: 30px;
+      height: 30px;
+      border: 2px solid #333;
+    }
+    .pressure {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    /* Vertical Brush Size Slider Styled in Pink */
+    #brushSize {
+      transform: rotate(-90deg);
+      position: relative;
+      left: 70px;
+      top:50px;
+      width: 200px;
+      -webkit-appearance: none;
+      appearance: none;
+      accent-color: #ff66b2;
+      margin: 20px 0;
+    }
+    input[type=range] {
+      background: transparent;
+    }
+    #brushSize::-webkit-slider-runnable-track {
+      height: 8px;
+      background: #ff99cc;
+      border: none;
+      border-radius: 4px;
+    }
+    #brushSize::-moz-range-track {
+      height: 8px;
+      background: #ff99cc;
+      border: none;
+      border-radius: 4px;
+    }
+    #brushSize::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #ff66b2;
+      border: none;
+      border-radius: 50%;
+      margin-top: -6px;
+    }
+    #brushSize::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #ff66b2;
+      border: none;
+      border-radius: 50%;
+    }
+    /* SVG icon styling inside buttons */
+    .tool-btn svg {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <!-- MS Paint Container -->
+  <div class="container" id="MSpaintcontainer">
+    <!-- Title Container Above Canvas -->
+    <div class="title-container">untitled-Paint</div>
+    <!-- Toolbar Section -->
+    <div class="container py-4">
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <div class="d-flex gap-2 mb-2 flex-wrap align-items-center">
+            <input type="color" id="colorPicker" class="form-control form-control-color" title="Choose a color">
+            <!-- Vertical Brush Size Slider with range 1px to 50px -->
+            <input type="range" id="brushSize" min="1" max="50" value="5" title="Brush size">
+            <!-- Draw button replaced with a pen SVG icon -->
+            <button id="drawBtn" class="btn btn-outline-primary tool-btn active" title="Draw">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2 21l1-4 13-13 4 4-13 13-4 1zM19.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1.003 1.003 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+              </svg>
+            </button>
+            <!-- Eraser button replaced with an eraser SVG icon -->
+            <button id="eraseBtn" class="btn btn-outline-primary tool-btn" title="Eraser">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16.24 3.56c-.57-.57-1.5-.57-2.07 0l-9.17 9.17c-.16.16-.27.37-.31.59l-1.66 7.44c-.11.5.34.95.84.84l7.44-1.66c.22-.04.43-.15.59-.31l9.17-9.17c.57-.57.57-1.5 0-2.07l-4.53-4.53zM7.34 15.66l-2.12.47.47-2.12 7.09-7.09 1.65 1.65-7.09 7.09z"/>
+              </svg>
+            </button>
+            <button id="clearBtn" class="btn btn-outline-danger" title="Clear">Clear</button>
+            <button id="saveBtn" class="btn btn-success" title="Save">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Canvas Section (Centered) -->
+    <div class="row w-100">
+      <div class="col-md-12 text-center">
+        <canvas id="canvas" width="1000" height="600"></canvas>
+      </div>
+    </div>
+    <!-- Pressure Info -->
+    <div class="pressure">Pressure: 0</div>
+  </div>
+
+  <!-- Save Reminder Modal -->
+  <div class="modal fade" id="reminderModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Reminder</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          You have unsaved changes! Would you like to save your work?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="modalSaveBtn">Save Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let currentTool = 'draw';
+    let currentColor = '#000000';
+    let brushSize = 5;
+
+    function initCanvas() {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      // Load saved drawing if available
+      const savedData = localStorage.getItem('canvasData');
+      if (savedData) {
+        const img = new Image();
+        img.onload = () => ctx.drawImage(img, 0, 0);
+        img.src = savedData;
+      }
+    }
+
+    function startDrawing(e) {
+      isDrawing = true;
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      ctx.strokeStyle = (currentTool === 'erase') ? '#FFFFFF' : currentColor;
+      ctx.lineWidth = brushSize;
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+    }
+
+    function stopDrawing() {
+      isDrawing = false;
+      saveToLocalStorage();
+    }
+
+    function saveToLocalStorage() {
+      localStorage.setItem('canvasData', canvas.toDataURL());
+    }
+
+    document.getElementById('colorPicker').addEventListener('input', (e) => {
+      currentColor = e.target.value;
+      ctx.strokeStyle = currentColor;
+    });
+
+    // Vertical slider for brush size
+    document.getElementById('brushSize').addEventListener('input', (e) => {
+      brushSize = parseInt(e.target.value);
+      ctx.lineWidth = brushSize;
+    });
+
+    document.getElementById('drawBtn').addEventListener('click', function () {
+      currentTool = 'draw';
+      ctx.strokeStyle = currentColor;
+      document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+    });
+
+    document.getElementById('eraseBtn').addEventListener('click', function () {
+      currentTool = 'erase';
+      ctx.strokeStyle = '#FFFFFF';
+      document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      saveToLocalStorage();
+    });
+
+    document.getElementById('saveBtn').addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = `painting-${new Date().toISOString().slice(0,10)}.png`;
+      link.href = canvas.toDataURL();
+      link.click();
+      saveToLocalStorage();
+    });
+
+    function logPressure(ev) {
+      document.querySelector(".pressure").innerText = `Pressure: ${ev.pressure.toFixed(2)}`;
+    }
+
+    document.addEventListener("pointerdown", logPressure);
+    document.addEventListener("pointermove", logPressure);
+    document.addEventListener("pointerup", logPressure);
+
+    function startSaveTimer() {
+      setInterval(() => {
+        new bootstrap.Modal(document.getElementById('reminderModal')).show();
+      }, 600000);
+    }
+
+    document.getElementById('modalSaveBtn').addEventListener('click', () => {
+      saveToLocalStorage();
+      bootstrap.Modal.getInstance(document.getElementById('reminderModal')).hide();
+    });
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseleave', stopDrawing);
+
+    initCanvas();
+    startSaveTimer();
+  </script>
+</body>
+</html>
