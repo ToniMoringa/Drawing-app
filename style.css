@@ -1,6 +1,5 @@
-
-/* Ensure full height for vertical centering */
-html, body {
+ /* Ensure full height for vertical centering */
+ html, body {
   height: 100%;
   margin: 0;
 }
@@ -10,7 +9,9 @@ body, a {
   font-family: "Itim", sans-serif;
   color: #816b97;
 }
-/* MS Paint Container -*/
+
+/* ✿ MS Paint */
+
 #MSpaintcontainer {
   border: 2px solid #b77797;
   border-radius: 60px;
@@ -93,7 +94,7 @@ body, a {
   margin: 20px 0;
 }
 input[type=range] {
-  background: transparent;
+background: transparent;
 }
 #brushSize::-webkit-slider-runnable-track {
   height: 8px;
@@ -129,3 +130,4 @@ input[type=range] {
   height: 24px;
   vertical-align: middle;
 }
+/*✿ MS Paint */
