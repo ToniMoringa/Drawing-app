@@ -1,0 +1,131 @@
+
+/* Ensure full height for vertical centering */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body, a {
+  cursor: url('graphics/cursor_heartwing1.png'), auto;
+  background-color: #ffd8f2;
+  font-family: "Itim", sans-serif;
+  color: #816b97;
+}
+/* MS Paint Container -*/
+#MSpaintcontainer {
+  border: 2px solid #b77797;
+  border-radius: 60px;
+  background: radial-gradient(50% 50% at 50% 50%, #F5CEE1 0%, #FFF7FB 92%);
+  box-shadow: 10px 10px 8px #282323;
+  padding: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Title container above the canvas */
+.title-container {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #b77797;
+}
+/* Canvas styling */
+#canvas {
+  border: 3px solid #333;
+  border-radius: 10px;
+  background-color: white;
+  touch-action: none;
+  cursor: crosshair;
+}
+/* Custom Uniform Pink Shaded Buttons for all states */
+.btn,
+.btn:focus,
+.btn:hover,
+.btn:active,
+.btn-outline-primary,
+.btn-outline-primary:focus,
+.btn-outline-primary:hover,
+.btn-outline-danger,
+.btn-outline-danger:focus,
+.btn-outline-danger:hover,
+.btn-success,
+.btn-success:focus,
+.btn-success:hover {
+  background-color: #ff99cc !important;
+  border-color: #ff66b2 !important;
+  color: white !important;
+  border-radius: 30px;
+}
+.btn:active,
+.btn-outline-primary:active,
+.btn-outline-danger:active,
+.btn-success:active {
+  background-color: #ff66b2 !important;
+  border-color: #ff3385 !important;
+}
+.tool-btn.active {
+  background-color: #ff66b2 !important;
+  color: white !important;
+}
+.color-preview {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #333;
+}
+.pressure {
+  margin-top: 10px;
+  font-weight: bold;
+}
+/* Vertical Brush Size Slider Styled in Pink */
+#brushSize {
+  transform: rotate(-90deg);
+  position: relative;
+  left: 70px;
+  top:50px;
+  width: 200px;
+  -webkit-appearance: none;
+  appearance: none;
+  accent-color: #ff66b2;
+  margin: 20px 0;
+}
+input[type=range] {
+  background: transparent;
+}
+#brushSize::-webkit-slider-runnable-track {
+  height: 8px;
+  background: #ff99cc;
+  border: none;
+  border-radius: 4px;
+}
+#brushSize::-moz-range-track {
+  height: 8px;
+  background: #ff99cc;
+  border: none;
+  border-radius: 4px;
+}
+#brushSize::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #ff66b2;
+  border: none;
+  border-radius: 50%;
+  margin-top: -6px;
+}
+#brushSize::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #ff66b2;
+  border: none;
+  border-radius: 50%;
+}
+/* SVG icon styling inside buttons */
+.tool-btn svg {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+}
